@@ -26,41 +26,16 @@
         body { background-color: var(--bg-body); color: var(--text-main); }
         .fw-normal { font-weight: 400; color: var(--text-muted); }
 
-        /* Main Navigation Bar Update */
-        .top-bar {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 2rem;
-        }
-
+        .top-bar { background-color: var(--bg-card); border-bottom: 1px solid var(--border); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
         .brand { display: flex; align-items: center; gap: 0.75rem; color: var(--primary); text-decoration: none; }
         .brand h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0; }
         
         .app-nav { display: flex; gap: 1rem; }
-        .nav-link { 
-            text-decoration: none; 
-            color: var(--text-muted); 
-            font-weight: 500; 
-            padding: 0.5rem 1rem; 
-            border-radius: var(--radius-md); 
-            transition: var(--transition);
-        }
+        .nav-link { text-decoration: none; color: var(--text-muted); font-weight: 500; padding: 0.5rem 1rem; border-radius: var(--radius-md); transition: var(--transition); }
         .nav-link:hover { background-color: #f1f5f9; color: var(--primary); }
         .nav-link.active { background-color: #eff6ff; color: var(--accent); }
-
-        .header-spacer { width: 300px; } /* Balances the flexbox layout */
+        .header-spacer { width: 300px; } 
 
         .container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1400px; margin: 2rem auto; padding: 0 2rem; height: calc(100vh - 120px); }
         section { display: flex; flex-direction: column; gap: 1.5rem; height: 100%; }
