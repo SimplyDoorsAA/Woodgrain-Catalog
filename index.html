@@ -3,256 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SimplyDoors Estimator Suite</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>SimplyDoors Part Finder</title>
     <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --transition: all 0.2s ease;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); -webkit-font-smoothing: antialiased; }
-        .fw-normal { font-weight: 400; color: var(--text-muted); }
-
-        .top-bar { background-color: var(--bg-card); border-bottom: 1px solid var(--border); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
-        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
-        .brand { display: flex; align-items: center; gap: 0.75rem; color: var(--primary); text-decoration: none; }
-        .brand h1 { font-size: 1.25rem; font-weight: 700; }
-        
-        .app-nav { display: flex; gap: 1rem; }
-        .nav-link { text-decoration: none; color: var(--text-muted); font-weight: 500; padding: 0.5rem 1rem; border-radius: var(--radius-md); transition: var(--transition); }
-        .nav-link:hover { background-color: #f1f5f9; color: var(--primary); }
-        .nav-link.active { background-color: #eff6ff; color: var(--accent); }
-
-        .search-wrapper { position: relative; flex: 1; max-width: 500px; }
-        .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        #searchInput { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-body); transition: var(--transition); }
-        #searchInput:focus { outline: none; border-color: var(--accent); background: var(--bg-card); }
-
-        .container { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
-        .sidebar { position: sticky; top: 5.5rem; height: fit-content; }
-        .sidebar-header { margin-bottom: 1rem; }
-        .sidebar-header h3 { font-size: 0.875rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
-
-        .category-nav { display: flex; flex-direction: column; gap: 0.5rem; }
-        .nav-btn { text-align: left; padding: 0.75rem 1rem; background: transparent; border: none; border-radius: var(--radius-md); font-size: 0.95rem; color: var(--text-main); cursor: pointer; transition: var(--transition); display: flex; justify-content: space-between; align-items: center; }
-        .nav-btn:hover { background: #f1f5f9; }
-        .nav-btn.active { background: var(--accent); color: white; font-weight: 500; }
-        .nav-btn .count { font-size: 0.8rem; background: rgba(0,0,0,0.1); padding: 0.1rem 0.5rem; border-radius: 12px; }
-        .nav-btn.active .count { background: rgba(255,255,255,0.2); }
-
-        .results-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
-        .results-header h2 { font-size: 1.5rem; font-weight: 600; color: var(--primary); }
-        .result-count { color: var(--text-muted); font-size: 0.9rem; }
-
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-        .product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: var(--shadow-sm); transition: var(--transition); }
-        .product-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); transform: translateY(-2px); }
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .part-number { font-family: monospace; font-size: 0.9rem; color: var(--text-muted); }
-        .price { font-weight: 700; font-size: 1.25rem; color: var(--primary); }
-        .description { font-size: 1rem; line-height: 1.4; flex-grow: 1; }
-
-        .add-btn { width: 100%; padding: 0.75rem; background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--primary); font-weight: 600; cursor: pointer; transition: var(--transition); }
-        .add-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
-        .hidden { display: none !important; }
-        .empty-state { padding: 4rem; text-align: center; color: var(--text-muted); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .header { text-align: center; margin-bottom: 25px; }
+        h1 { margin: 0 0 10px 0; color: #1a365d; font-size: 28px; }
+        p { margin: 0; color: #666; font-size: 15px; }
+        .tabs-container { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; border-bottom: 2px solid #edf2f7; }
+        .tab-btn { padding: 10px 20px; background-color: #e2e8f0; color: #4a5568; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; }
+        .tab-btn:hover { background-color: #cbd5e1; }
+        .tab-btn.active { background-color: #2b6cb0; color: white; box-shadow: 0 2px 4px rgba(43, 108, 176, 0.3); }
+        #searchBar { width: 100%; box-sizing: border-box; padding: 18px 20px; font-size: 20px; border: 2px solid #cbd5e1; border-radius: 8px; margin-bottom: 20px; outline: none; transition: border-color 0.2s; }
+        #searchBar:focus { border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
+        table { width: 100%; border-collapse: collapse; font-size: 16px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #f8fafc; font-weight: bold; color: #4a5568; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
+        tr { cursor: pointer; transition: background 0.15s; }
+        tr:hover { background-color: #ebf8ff; }
+        .part-num { font-family: monospace; font-weight: bold; color: #2b6cb0; font-size: 17px; }
+        .category { font-size: 13px; color: #718096; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        .price { font-weight: bold; color: #2f855a; }
+        #toast { visibility: hidden; min-width: 250px; background-color: #38a169; color: #fff; text-align: center; border-radius: 6px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 16px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2s forwards; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body>
-    <div class="app-layout">
-        <header class="top-bar">
-            <div class="header-content">
-                <a href="index.html" class="brand">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12"/><path d="M9 21v-9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v9"/></svg>
-                    <h1>SimplyDoors <span class="fw-normal">Estimator Suite</span></h1>
-                </a>
-                
-                <nav class="app-nav">
-                    <a href="index.html" class="nav-link active">Catalog Explorer</a>
-                    <a href="unroller.html" class="nav-link">Matrix Unroller</a>
-                </nav>
-
-                <div class="search-wrapper">
-                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" id="searchInput" placeholder="Search part number or description..." autocomplete="off">
-                </div>
-            </div>
-        </header>
-
-        <main class="container">
-            <aside class="sidebar">
-                <div class="sidebar-header">
-                    <h3>Catalog Sections</h3>
-                </div>
-                <nav class="category-nav" id="categoryNav"></nav>
-            </aside>
-
-            <section class="results-area">
-                <div class="results-header">
-                    <h2 id="currentCategoryTitle">All Products</h2>
-                    <span id="resultCount" class="result-count">0 items</span>
-                </div>
-                
-                <div class="product-grid" id="resultsGrid"></div>
-
-                <div id="noResults" class="empty-state hidden">
-                    <p>No items found matching your criteria.</p>
-                </div>
-            </section>
-        </main>
+    <div class="container">
+        <div class="header">
+            <h1>SimplyDoors Part Finder</h1>
+            <p>Select a catalog tab to filter. Type to search within that section. Click a row to copy the Part Number.</p>
+        </div>
+        <div class="tabs-container" id="tabsContainer"></div>
+        <input type="text" id="searchBar" placeholder="Search part number, size, or description..." autocomplete="off" autofocus>
+        <table>
+            <thead>
+                <tr>
+                    <th>Part Number</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Base Price</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
     </div>
+    <div id="toast">Copied to clipboard!</div>
+
+    <script src="data.js"></script>
 
     <script>
-        // Expanded dataset directly from the SimplyDoors 2025 Catalog
-        const catalogData = [
-            // Therma-Tru Components
-            { id: "CRNF1208L1L", category: "Therma-Tru Components", description: "1068 Flush Glzd LowE FP", price: 682.55 },
-            { id: "CAN83026D1HW1DU4", category: "Therma-Tru Components", description: "3080 Homewd 1Lt Blk Nic NB NP", price: 1240.64 },
-            { id: "S210-3068", category: "Therma-Tru Components", description: "3068 Smooth Star 6 Panel", price: 215.50 },
-            { id: "S2000-3068", category: "Therma-Tru Components", description: "3068 Smooth Star Flush", price: 185.25 },
-            
-            // Molded Doors (From Matrix)
-            { id: "WGIHCS-166PSS", category: "Molded Doors", description: "1/6 6'8\" 1-3/8\" HC 6 Panel Smooth Slab", price: 38.65 },
-            { id: "WGIHCS-166PSU", category: "Molded Doors", description: "1/6 6'8\" 1-3/8\" HC 6 Panel Smooth Prehung Unit", price: 81.41 },
-            { id: "WGIHCS-206PSS", category: "Molded Doors", description: "2/0 6'8\" 1-3/8\" HC 6 Panel Smooth Slab", price: 40.65 },
-            { id: "WGIHCS-206PSU", category: "Molded Doors", description: "2/0 6'8\" 1-3/8\" HC 6 Panel Smooth Prehung Unit", price: 83.41 },
-            { id: "WGIHCS-246PSS", category: "Molded Doors", description: "2/4 6'8\" 1-3/8\" HC 6 Panel Smooth Slab", price: 44.20 },
-            { id: "WGIHCS-246PSU", category: "Molded Doors", description: "2/4 6'8\" 1-3/8\" HC 6 Panel Smooth Prehung Unit", price: 86.96 },
-            
-            // Larson Storm Doors
-            { id: "3237084W", category: "Larson Storm Doors", description: "370-84 32\" Lifestyle MVWhite Brush Nick", price: 298.12 },
-            { id: "3637084W", category: "Larson Storm Doors", description: "370-84 36\" Lifestyle MVWhite Brush Nick", price: 305.50 },
-            { id: "3214604B", category: "Larson Storm Doors", description: "146-04 32\" Trad Elegance Black", price: 412.00 },
-            
-            // Exterior Adds & Options (Page 72)
-            { id: "REX10150F360LP", category: "Exterior Adds & Options", description: "10'x150' Rex Fortis 360 Housewrap Low Perm", price: 45.00 },
-            { id: "REX10195F360HP", category: "Exterior Adds & Options", description: "10'x195' Rex Fortis 360 Housewrap High Perm", price: 40.00 },
-            { id: "REX10195F360LP", category: "Exterior Adds & Options", description: "10'x195' Rex Fortis 360 Housewrap Low Perm", price: 40.00 },
-            { id: "REXSF040250", category: "Exterior Adds & Options", description: "Roll 4'x250' Rex Syn Felt Roof Underlayment (10Sq)", price: 35.00 },
-            { id: "REXT040250", category: "Exterior Adds & Options", description: "Roll 48\"x250' TECHNOply Roof Underlayment (48t)", price: 48.00 },
-            { id: "REXPST", category: "Exterior Adds & Options", description: "3\"x165' Rex Premium Seam Tape (16/Ctn)", price: 16.00 }
-        ];
+        let currentActiveTab = 'All Items';
+        const searchBar = document.getElementById('searchBar');
+        const tableBody = document.getElementById('tableBody');
+        const tabsContainer = document.getElementById('tabsContainer');
+        const toast = document.getElementById('toast');
 
-        const searchInput = document.getElementById('searchInput');
-        const categoryNav = document.getElementById('categoryNav');
-        const resultsGrid = document.getElementById('resultsGrid');
-        const noResultsDiv = document.getElementById('noResults');
-        const currentCategoryTitle = document.getElementById('currentCategoryTitle');
-        const resultCountSpan = document.getElementById('resultCount');
+        const formatMoney = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 
-        let currentCategory = 'All';
-        let searchTerm = '';
-        let debounceTimeout;
-
-        const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-
-        const initializeNavigation = () => {
-            const uniqueCategories = [...new Set(catalogData.map(item => item.category))].sort();
-            const allCategories = ['All', ...uniqueCategories];
-            categoryNav.innerHTML = ''; 
-
-            allCategories.forEach(category => {
-                const count = category === 'All' ? catalogData.length : catalogData.filter(item => item.category === category).length;
+        const buildTabs = () => {
+            const uniqueCategories = [...new Set(catalog.map(item => item.category))].sort();
+            const allTabs = ['All Items', ...uniqueCategories];
+            tabsContainer.innerHTML = ''; 
+            allTabs.forEach(categoryName => {
                 const btn = document.createElement('button');
-                btn.className = `nav-btn ${category === currentCategory ? 'active' : ''}`;
-                btn.innerHTML = `${category} <span class="count">${count}</span>`;
-                
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentCategory = category;
-                    currentCategoryTitle.innerText = category === 'All' ? 'All Products' : category;
-                    searchInput.value = '';
-                    searchTerm = '';
-                    renderData();
-                });
-                categoryNav.appendChild(btn);
+                btn.className = `tab-btn ${categoryName === currentActiveTab ? 'active' : ''}`;
+                btn.innerText = categoryName;
+                btn.onclick = () => {
+                    currentActiveTab = categoryName; 
+                    buildTabs(); 
+                    executeSearch(); 
+                    searchBar.focus(); 
+                };
+                tabsContainer.appendChild(btn);
             });
         };
 
-        const renderData = () => {
-            const tokens = searchTerm.toLowerCase().split(' ').filter(token => token.length > 0);
-            const filtered = catalogData.filter(item => {
-                if (currentCategory !== 'All' && item.category !== currentCategory) return false;
-                if (tokens.length > 0) {
+        const renderTable = (items) => {
+            tableBody.innerHTML = ''; 
+            const displayItems = items.slice(0, 150); 
+            displayItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.onclick = () => {
+                    navigator.clipboard.writeText(item.id);
+                    toast.innerText = `Copied: ${item.id}`;
+                    toast.classList.remove("show");
+                    void toast.offsetWidth; 
+                    toast.classList.add("show");
+                };
+                row.innerHTML = `<td class="part-num">${item.id}</td><td>${item.description}</td><td><span class="category">${item.category}</span></td><td class="price">${formatMoney(item.price)}</td>`;
+                tableBody.appendChild(row);
+            });
+        };
+
+        const executeSearch = () => {
+            const searchTerms = searchBar.value.toLowerCase().split(' ').filter(term => term !== '');
+            const filteredResults = catalog.filter(item => {
+                if (currentActiveTab !== 'All Items' && item.category !== currentActiveTab) return false;
+                if (searchTerms.length > 0) {
                     const searchableText = `${item.id} ${item.description}`.toLowerCase();
-                    return tokens.every(token => searchableText.includes(token));
+                    return searchTerms.every(term => searchableText.includes(term));
                 }
-                return true;
+                return true; 
             });
-            updateGrid(filtered);
+            renderTable(filteredResults);
         };
 
-        const updateGrid = (results) => {
-            resultsGrid.innerHTML = '';
-            resultCountSpan.innerText = `${results.length} items`;
-            if (results.length === 0) {
-                noResultsDiv.classList.remove('hidden');
-                return;
+        searchBar.addEventListener('input', executeSearch);
+        
+        // Wait for data.js to load, then build the app
+        window.onload = () => {
+            if(typeof catalog !== 'undefined') {
+                buildTabs();
+                executeSearch();
+            } else {
+                tableBody.innerHTML = "<tr><td colspan='4'>Please add items to your data.js file.</td></tr>";
             }
-            noResultsDiv.classList.add('hidden');
-            results.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <div class="card-header">
-                        <span class="part-number">${item.id}</span>
-                        <span class="price">${formatCurrency(item.price)}</span>
-                    </div>
-                    <p class="description">${item.description}</p>
-                    <button class="add-btn" onclick="addToEstimate('${item.id}', this)">Add to Estimate</button>
-                `;
-                resultsGrid.appendChild(card);
-            });
         };
-
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                searchTerm = e.target.value.trim();
-                if (searchTerm.length > 0 && currentCategory !== 'All') {
-                    currentCategory = 'All';
-                    currentCategoryTitle.innerText = 'Search Results';
-                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                    document.querySelector('.nav-btn').classList.add('active'); 
-                }
-                renderData();
-            }, 150);
-        });
-
-        window.addToEstimate = (itemId, buttonElement) => {
-            const selectedItem = catalogData.find(item => item.id === itemId);
-            const originalText = buttonElement.innerText;
-            buttonElement.innerText = "Added ✓";
-            buttonElement.style.backgroundColor = "#10b981"; 
-            buttonElement.style.color = "white";
-            buttonElement.style.borderColor = "#10b981";
-            setTimeout(() => {
-                buttonElement.innerText = originalText;
-                buttonElement.style.backgroundColor = "";
-                buttonElement.style.color = "";
-                buttonElement.style.borderColor = "";
-            }, 1000);
-            console.log('Passing to Estimator Pipeline:', selectedItem);
-        };
-
-        initializeNavigation();
-        renderData();
     </script>
 </body>
 </html>
