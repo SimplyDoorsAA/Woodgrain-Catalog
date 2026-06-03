@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimplyDoors Estimator Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --transition: all 0.2s ease;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); -webkit-font-smoothing: antialiased; }
+        .fw-normal { font-weight: 400; color: var(--text-muted); }
+
+        /* Main Navigation Bar Update */
+        .top-bar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .brand { display: flex; align-items: center; gap: 0.75rem; color: var(--primary); text-decoration: none; }
+        .brand h1 { font-size: 1.25rem; font-weight: 700; }
+        
+        .app-nav { display: flex; gap: 1rem; }
+        .nav-link { 
+            text-decoration: none; 
+            color: var(--text-muted); 
+            font-weight: 500; 
+            padding: 0.5rem 1rem; 
+            border-radius: var(--radius-md); 
+            transition: var(--transition);
+        }
+        .nav-link:hover { background-color: #f1f5f9; color: var(--primary); }
+        .nav-link.active { background-color: #eff6ff; color: var(--accent); }
+
+        .search-wrapper { position: relative; flex: 1; max-width: 500px; }
+        .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        #searchInput {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-body);
+            transition: var(--transition);
+        }
+        #searchInput:focus { outline: none; border-color: var(--accent); background: var(--bg-card); }
+
+        .container { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+        .sidebar { position: sticky; top: 5.5rem; height: fit-content; }
+        .sidebar-header { margin-bottom: 1rem; }
+        .sidebar-header h3 { font-size: 0.875rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
+
+        .category-nav { display: flex; flex-direction: column; gap: 0.5rem; }
+        .nav-btn {
+            text-align: left; padding: 0.75rem 1rem; background: transparent; border: none; border-radius: var(--radius-md);
+            font-size: 0.95rem; color: var(--text-main); cursor: pointer; transition: var(--transition);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav-btn:hover { background: #f1f5f9; }
+        .nav-btn.active { background: var(--accent); color: white; font-weight: 500; }
+        .nav-btn .count { font-size: 0.8rem; background: rgba(0,0,0,0.1); padding: 0.1rem 0.5rem; border-radius: 12px; }
+        .nav-btn.active .count { background: rgba(255,255,255,0.2); }
+
+        .results-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .results-header h2 { font-size: 1.5rem; font-weight: 600; color: var(--primary); }
+        .result-count { color: var(--text-muted); font-size: 0.9rem; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+        .product-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;
+            display: flex; flex-direction: column; gap: 1rem; box-shadow: var(--shadow-sm); transition: var(--transition);
+        }
+        .product-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); transform: translateY(-2px); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .part-number { font-family: monospace; font-size: 0.9rem; color: var(--text-muted); }
+        .price { font-weight: 700; font-size: 1.25rem; color: var(--primary); }
+        .description { font-size: 1rem; line-height: 1.4; flex-grow: 1; }
+
+        .add-btn {
+            width: 100%; padding: 0.75rem; background: var(--bg-body); border: 1px solid var(--border);
+            border-radius: var(--radius-md); color: var(--primary); font-weight: 600; cursor: pointer; transition: var(--transition);
+        }
+        .add-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        .hidden { display: none !important; }
+        .empty-state { padding: 4rem; text-align: center; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <header class="top-bar">
+            <div class="header-content">
+                <a href="index.html" class="brand">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12"/><path d="M9 21v-9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v9"/></svg>
+                    <h1>SimplyDoors <span class="fw-normal">Estimator Suite</span></h1>
+                </a>
+                
+                <nav class="app-nav">
+                    <a href="index.html" class="nav-link active">Catalog Explorer</a>
+                    <a href="unroller.html" class="nav-link">Matrix Unroller</a>
+                </nav>
+
+                <div class="search-wrapper">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="searchInput" placeholder="Search across all categories..." autocomplete="off">
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Catalog Sections</h3>
+                </div>
+                <nav class="category-nav" id="categoryNav"></nav>
+            </aside>
+
+            <section class="results-area">
+                <div class="results-header">
+                    <h2 id="currentCategoryTitle">All Products</h2>
+                    <span id="resultCount" class="result-count">0 items</span>
+                </div>
+                
+                <div class="product-grid" id="resultsGrid"></div>
+
+                <div id="noResults" class="empty-state hidden">
+                    <p>No items found matching your criteria.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const catalogData = [
+            { id: "CRNF1208L1L", category: "Therma-Tru Components", description: "1068 Flush Glzd LowE FP", price: 682.55 },
+            { id: "CAN83026D1HW1DU4", category: "Therma-Tru Components", description: "3080 Homewd 1Lt Blk Nic NB NP", price: 1240.64 },
+            { id: "WGIHCS-16-68-SLAB", category: "Molded Doors", description: "1/6 6'8\" 1-3/8\" HC 6 Panel Smooth Molded Slab", price: 38.65 },
+            { id: "WGIHCS-16-68-UNIT", category: "Molded Doors", description: "1/6 6'8\" 1-3/8\" HC 6 Panel Smooth Molded Prehung Unit", price: 81.41 },
+            { id: "3237084W", category: "Larson Storm Doors", description: "370-84 32\" Lifestyle MVWhite Brush Nick", price: 298.12 },
+            { id: "REX10150F360LP", category: "Exterior Adds & Options", description: "10'x150' Rex Fortis 360 Housewrap Low Perm", price: 45.00 },
+            { id: "REX10195F360HP", category: "Exterior Adds & Options", description: "10'x195' Rex Fortis 360 Housewrap High Perm", price: 40.00 },
+            { id: "REXSF040250", category: "Exterior Adds & Options", description: "Roll 4'x250' Rex Syn Felt Roof Underlayment (10Sq)", price: 35.00 }
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+        const categoryNav = document.getElementById('categoryNav');
+        const resultsGrid = document.getElementById('resultsGrid');
+        const noResultsDiv = document.getElementById('noResults');
+        const currentCategoryTitle = document.getElementById('currentCategoryTitle');
+        const resultCountSpan = document.getElementById('resultCount');
+
+        let currentCategory = 'All';
+        let searchTerm = '';
+        let debounceTimeout;
+
+        const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+
+        const initializeNavigation = () => {
+            const uniqueCategories = [...new Set(catalogData.map(item => item.category))].sort();
+            const allCategories = ['All', ...uniqueCategories];
+            categoryNav.innerHTML = ''; 
+
+            allCategories.forEach(category => {
+                const count = category === 'All' ? catalogData.length : catalogData.filter(item => item.category === category).length;
+                const btn = document.createElement('button');
+                btn.className = `nav-btn ${category === currentCategory ? 'active' : ''}`;
+                btn.innerHTML = `${category} <span class="count">${count}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = category;
+                    currentCategoryTitle.innerText = category === 'All' ? 'All Products' : category;
+                    searchInput.value = '';
+                    searchTerm = '';
+                    renderData();
+                });
+                categoryNav.appendChild(btn);
+            });
+        };
+
+        const renderData = () => {
+            const tokens = searchTerm.toLowerCase().split(' ').filter(token => token.length > 0);
+            const filtered = catalogData.filter(item => {
+                if (currentCategory !== 'All' && item.category !== currentCategory) return false;
+                if (tokens.length > 0) {
+                    const searchableText = `${item.id} ${item.description}`.toLowerCase();
+                    return tokens.every(token => searchableText.includes(token));
+                }
+                return true;
+            });
+            updateGrid(filtered);
+        };
+
+        const updateGrid = (results) => {
+            resultsGrid.innerHTML = '';
+            resultCountSpan.innerText = `${results.length} items`;
+            if (results.length === 0) {
+                noResultsDiv.classList.remove('hidden');
+                return;
+            }
+            noResultsDiv.classList.add('hidden');
+            results.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="part-number">${item.id}</span>
+                        <span class="price">${formatCurrency(item.price)}</span>
+                    </div>
+                    <p class="description">${item.description}</p>
+                    <button class="add-btn" onclick="addToEstimate('${item.id}', this)">Add to Estimate</button>
+                `;
+                resultsGrid.appendChild(card);
+            });
+        };
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                searchTerm = e.target.value.trim();
+                if (searchTerm.length > 0 && currentCategory !== 'All') {
+                    currentCategory = 'All';
+                    currentCategoryTitle.innerText = 'Search Results';
+                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelector('.nav-btn').classList.add('active'); 
+                }
+                renderData();
+            }, 150);
+        });
+
+        window.addToEstimate = (itemId, buttonElement) => {
+            const selectedItem = catalogData.find(item => item.id === itemId);
+            const originalText = buttonElement.innerText;
+            buttonElement.innerText = "Added ✓";
+            buttonElement.style.backgroundColor = "#10b981"; 
+            buttonElement.style.color = "white";
+            buttonElement.style.borderColor = "#10b981";
+            setTimeout(() => {
+                buttonElement.innerText = originalText;
+                buttonElement.style.backgroundColor = "";
+                buttonElement.style.color = "";
+                buttonElement.style.borderColor = "";
+            }, 1000);
+            console.log('Passing to Estimator Pipeline:', selectedItem);
+        };
+
+        initializeNavigation();
+        renderData();
+    </script>
+</body>
+</html>
